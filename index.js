@@ -3,7 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-const data = [
+var data = [
     { 
       "id": 1,
       "name": "Arto Hellas", 
@@ -42,10 +42,19 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    data = data.filter(item => item.id != id)
+    console.log("data:", data)
+
+    response.status(204).end()
+})
+
 app.get('/info', (request, response) => {
     response.send(`Phonebook has info for ${data.length} people <br> <br>
     ${(new Date()).toString()}`)
 })
+
 
 
 
