@@ -1,7 +1,19 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
+morgan.token('body', (req, res) => {
+  if (Object.keys(req.body).length !== 0) {
+    toReturn = {...req.body}
+    delete toReturn.id
+    return(JSON.stringify(toReturn))
+  } else {
+    return ''
+  }
+})
+
 app.use(express.json())
+app.use( morgan(':method :url :status :res[content-length] - :response-time ms :body') )
 
 var data = [
     { 
@@ -38,14 +50,14 @@ app.get('/api/persons/:id', (request, response) => {
         response.json(person)
     } else {
         response.status(404).end()
-        console.log(`404 at ${id}`)
+        //console.log(`404 at ${id}`)
     }
 })
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     data = data.filter(item => item.id != id)
-    console.log("data:", data)
+    //console.log("data:", data)
 
     response.status(204).end()
 })
@@ -65,7 +77,7 @@ app.post('/api/persons', (request, response) => {
   }
 
   const found = data.find(item => item.name == newPerson.name)
-  console.log("found", found)
+  //console.log("found", found)
   if (found) {
     return response.status(400).json({"error": "This person already exists"})
   }
@@ -76,7 +88,7 @@ app.post('/api/persons', (request, response) => {
   const newID = Math.floor(Math.random() * 10000)
   newPerson.id = newID
   data.push(newPerson)
-  console.log(newPerson)
+  //console.log(newPerson)
   response.json(newPerson)
 })
 
