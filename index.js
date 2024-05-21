@@ -101,14 +101,19 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
 
   const note = {
     name: request.body.name,
     number: request.body.number
   }
 
-  Note.findByIdAndUpdate(request.params.id, )
+  Note.findByIdAndUpdate(request.params.id, note, {new: true})
+    .then(updatedNote => {
+      response.json(updatedNote)
+    })
+    .catch(error => next(error))
+
   console.log("put request")
 })
 
