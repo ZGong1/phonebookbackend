@@ -13,8 +13,12 @@ mongoose.connect(url);
 
 //// Defines schema
 const noteSchema = new mongoose.Schema({
- name: String,
- phoneNumber: Number,
+  name: {
+    type: String,
+    minLength: 3,
+    required: true
+  },
+  phoneNumber: Number,
 });
 const Note = mongoose.model('Note', noteSchema);
 ////
