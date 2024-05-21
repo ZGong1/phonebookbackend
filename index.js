@@ -50,23 +50,29 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = data.find(item => item.id === id)
-
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-        //console.log(`404 at ${id}`)
-    }
+    Note.findById(request.params.id)
+      .then(note => {
+        if (note) {
+          response.json(note)
+        } else {
+          response.status(404).end()
+        }
+      })
+      .catch(e => {
+        console.log(e)
+        response.status(400).send({error: "malformed id"})
+      })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    data = data.filter(item => item.id != id)
-    //console.log("data:", data)
-
-    response.status(204).end()
+    Note.findByIdAndDelete(request.params.id)
+      .then(result => {
+        response.status(204).end()
+      })
+      .catch(e => {
+        console.log(e)
+        response.status(500).end()
+      })
 })
 
 app.get('/info', (request, response) => {
