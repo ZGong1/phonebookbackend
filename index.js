@@ -30,6 +30,7 @@ app.use(cors())
 app.use(express.static('dist'))
 
 
+
 var data = [
     { 
       "id": 1,
@@ -59,7 +60,7 @@ app.get('/api/persons', (request, response) => {
     })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     Note.findById(request.params.id)
       .then(note => {
         if (note) {
@@ -68,10 +69,7 @@ app.get('/api/persons/:id', (request, response) => {
           response.status(404).end()
         }
       })
-      .catch(e => {
-        console.log(e)
-        response.status(400).send({error: "malformed id"})
-      })
+      .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -103,7 +101,16 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
+app.put('/api/persons/:id', (request, response) => {
 
+  const note = {
+    name: request.body.name,
+    number: request.body.number
+  }
+
+  Note.findByIdAndUpdate(request.params.id, )
+  console.log("put request")
+})
 
 app.use(errorHandler)
 
