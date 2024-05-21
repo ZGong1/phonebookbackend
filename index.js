@@ -5,9 +5,9 @@ const Note = require('./models/note')
 
 const app = express()
 
-morgan.token('body', (req, res) => {
+morgan.token('body', (req) => {
   if (Object.keys(req.body).length !== 0) {
-    toReturn = {...req.body}
+    var toReturn = {...req.body}
     delete toReturn.id
     return(JSON.stringify(toReturn))
   } else {
@@ -33,44 +33,44 @@ app.use(express.static('dist'))
 
 
 app.get('/api/persons', (request, response) => {
-    Note.find({}).then(items => {
-      response.json(items)
-    })
+  Note.find({}).then(items => {
+    response.json(items)
+  })
 })
 
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Note.findById(request.params.id)
-      .then(note => {
-        if (note) {
-          response.json(note)
-        } else {
-          response.status(404).end()
-        }
-      })
-      .catch(error => next(error))
+  Note.findById(request.params.id)
+    .then(note => {
+      if (note) {
+        response.json(note)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 
 app.delete('/api/persons/:id', (request, response) => {
-    Note.findByIdAndDelete(request.params.id)
-      .then(result => {
-        response.status(204).end()
-      })
-      .catch(e => {
-        console.log(e)
-        response.status(500).end()
-      })
+  Note.findByIdAndDelete(request.params.id)
+    .then(() => {
+      response.status(204).end()
+    })
+    .catch(e => {
+      console.log(e)
+      response.status(500).end()
+    })
 })
 
 
 app.get('/info', (request, response) => {
 
-    Note.countDocuments({})
-      .then(count => {
-        response.send(`Phonebook has info for ${count} people <br> <br>
+  Note.countDocuments({})
+    .then(count => {
+      response.send(`Phonebook has info for ${count} people <br> <br>
         ${(new Date()).toString()}`)
-      })
+    })
     
 })
 
@@ -83,8 +83,8 @@ app.post('/api/persons', (request, response, next) => {
   console.log(newPerson)
 
   newPerson.save()
-    .then(result => {
-    console.log(`${request.body.name} added with # ${request.body.number}`)
+    .then(() => {
+      console.log(`${request.body.name} added with # ${request.body.number}`)
     })
     .catch(e => next(e))
 })
@@ -103,12 +103,12 @@ app.put('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 
-  console.log("put request")
+  console.log('put request')
 })
 
 app.use(errorHandler)
 
-const PORT = 3002;
+const PORT = 3002
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})
