@@ -74,29 +74,6 @@ app.get('/info', (request, response) => {
     ${(new Date()).toString()}`)
 })
 
-//// DEPRECATED POST CODE
-// app.post('/api/persons', (request, response) => {
-//   const newPerson = request.body
-//   if (!newPerson.name) {
-//     return response.status(400).json({"error": "There is no name"})
-//   }
-//   if (!newPerson.number) {
-//     return response.status(400).json({"error": "There is no number"})
-//   }
-
-//   const found = data.find(item => item.name == newPerson.name)
-//   //console.log("found", found)
-//   if (found) {
-//     return response.status(400).json({"error": "This person already exists"})
-//   }
-
-//   // code to run if no exception
-//   const newID = Math.floor(Math.random() * 10000)
-//   newPerson.id = newID
-//   data.push(newPerson)
-//   //console.log(newPerson)
-//   response.json(newPerson)
-// })
 
 app.post('/api/persons', (request, response) => {
   const newPerson = new Note({
