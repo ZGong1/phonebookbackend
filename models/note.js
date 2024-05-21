@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const mongoose = require('mongoose')
 
 mongoose.set('strictQuery', false)
@@ -5,8 +7,8 @@ mongoose.set('strictQuery', false)
 
 const url = process.env.MONGODB_URI
 
-
-console.log('connecting to', url)
+// this prints password to console
+//console.log('connecting to', url)
 
 mongoose.connect(url)
 
@@ -18,8 +20,8 @@ mongoose.connect(url)
   })
 
 const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
+  name: String,
+  number: Number,
 })
 
 noteSchema.set('toJSON', {

@@ -1,6 +1,7 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Note = require('./models/note')
 
 const app = express()
 
@@ -43,7 +44,9 @@ var data = [
 ]
 
 app.get('/api/persons', (request, response) => {
-    response.json(data)
+    Note.find({}).then(items => {
+      response.json(items)
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -71,31 +74,41 @@ app.get('/info', (request, response) => {
     ${(new Date()).toString()}`)
 })
 
+//// DEPRECATED POST CODE
+// app.post('/api/persons', (request, response) => {
+//   const newPerson = request.body
+//   if (!newPerson.name) {
+//     return response.status(400).json({"error": "There is no name"})
+//   }
+//   if (!newPerson.number) {
+//     return response.status(400).json({"error": "There is no number"})
+//   }
+
+//   const found = data.find(item => item.name == newPerson.name)
+//   //console.log("found", found)
+//   if (found) {
+//     return response.status(400).json({"error": "This person already exists"})
+//   }
+
+//   // code to run if no exception
+//   const newID = Math.floor(Math.random() * 10000)
+//   newPerson.id = newID
+//   data.push(newPerson)
+//   //console.log(newPerson)
+//   response.json(newPerson)
+// })
+
 app.post('/api/persons', (request, response) => {
-  const newPerson = request.body
-  if (!newPerson.name) {
-    return response.status(400).json({"error": "There is no name"})
-  }
-  if (!newPerson.number) {
-    return response.status(400).json({"error": "There is no number"})
-  }
+  const newPerson = new Note({
+    name: request.body.name,
+    number: request.body.number,
+  })
+  console.log(newPerson)
 
-  const found = data.find(item => item.name == newPerson.name)
-  //console.log("found", found)
-  if (found) {
-    return response.status(400).json({"error": "This person already exists"})
-  }
-
-
-  // code to run if no exception
-
-  const newID = Math.floor(Math.random() * 10000)
-  newPerson.id = newID
-  data.push(newPerson)
-  //console.log(newPerson)
-  response.json(newPerson)
+  newPerson.save().then(result => {
+    console.log(`${request.body.name} added with # ${request.body.number}`)
+  })
 })
-
 
 
 

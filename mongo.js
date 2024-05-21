@@ -7,6 +7,7 @@ const phoneNumber = process.argv[4];
 const url = `mongodb+srv://ZGong:${password}@cluster0.5xybshu.mongodb.net/phonebookApp?retryWrites=true&w=majority&appName=Cluster0`;
 
 
+
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
 
