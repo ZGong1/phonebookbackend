@@ -7,7 +7,7 @@ const app = express()
 
 morgan.token('body', (req) => {
   if (Object.keys(req.body).length !== 0) {
-    var toReturn = {...req.body}
+    var toReturn = { ...req.body }
     delete toReturn.id
     return(JSON.stringify(toReturn))
   } else {
@@ -19,9 +19,9 @@ const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({error: 'malformatted id'})
+    return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({error: error.message})
+    return response.status(400).json({ error: error.message })
   }
   next(error)
 }
@@ -71,7 +71,6 @@ app.get('/info', (request, response) => {
       response.send(`Phonebook has info for ${count} people <br> <br>
         ${(new Date()).toString()}`)
     })
-    
 })
 
 
@@ -97,7 +96,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: request.body.number
   }
 
-  Note.findByIdAndUpdate(request.params.id, note, {new: true, runValidators: true})
+  Note.findByIdAndUpdate(request.params.id, note, { new: true, runValidators: true })
     .then(updatedNote => {
       response.json(updatedNote)
     })
