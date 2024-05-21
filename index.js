@@ -54,11 +54,13 @@ var data = [
     }
 ]
 
+
 app.get('/api/persons', (request, response) => {
     Note.find({}).then(items => {
       response.json(items)
     })
 })
+
 
 app.get('/api/persons/:id', (request, response, next) => {
     Note.findById(request.params.id)
@@ -72,6 +74,7 @@ app.get('/api/persons/:id', (request, response, next) => {
       .catch(error => next(error))
 })
 
+
 app.delete('/api/persons/:id', (request, response) => {
     Note.findByIdAndDelete(request.params.id)
       .then(result => {
@@ -83,9 +86,15 @@ app.delete('/api/persons/:id', (request, response) => {
       })
 })
 
+
 app.get('/info', (request, response) => {
-    response.send(`Phonebook has info for ${data.length} people <br> <br>
-    ${(new Date()).toString()}`)
+
+    Note.countDocuments({})
+      .then(count => {
+        response.send(`Phonebook has info for ${count} people <br> <br>
+        ${(new Date()).toString()}`)
+      })
+    
 })
 
 
@@ -100,6 +109,7 @@ app.post('/api/persons', (request, response) => {
     console.log(`${request.body.name} added with # ${request.body.number}`)
   })
 })
+
 
 app.put('/api/persons/:id', (request, response, next) => {
 
