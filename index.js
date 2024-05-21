@@ -15,10 +15,20 @@ morgan.token('body', (req, res) => {
   }
 })
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({error: 'malformatted id'})
+  } 
+  next(error)
+}
+
 app.use(express.json())
 app.use( morgan(':method :url :status :res[content-length] - :response-time ms :body') )
 app.use(cors())
 app.use(express.static('dist'))
+
 
 var data = [
     { 
@@ -94,6 +104,8 @@ app.post('/api/persons', (request, response) => {
 })
 
 
+
+app.use(errorHandler)
 
 const PORT = 3002;
 app.listen(PORT, () => {
